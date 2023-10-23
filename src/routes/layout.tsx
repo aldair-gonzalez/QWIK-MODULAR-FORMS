@@ -17,7 +17,8 @@ export const useServerTimeLoader = routeLoader$(() => {
 
 export default component$(() => {
   return (
-    <main>
+    <main class="w-full h-screen p-10 flex flex-col items-center justify-center gap-4">
+      <h1 class="text-2xl">Modular forms</h1>
       <Slot />
     </main>
   );
