@@ -1,79 +1,88 @@
 import { $, component$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
-import type { SubmitHandler } from '@modular-forms/qwik';
-import { useForm, type InitialValues, valiForm$, formAction$ } from '@modular-forms/qwik';
-import type { Input } from 'valibot';
-import { email, minLength, object, string } from 'valibot';
-
-const LoginSchema = object({
-  email: string([
-    minLength(1, 'Please enter your email.'),
-    email('The email address is badly formatted.'),
-  ]),
-  password: string([
-    minLength(1, 'Please enter your password.'),
-    minLength(8, 'Your password must have 8 characters or more.'),
-  ]),
-});
-
-type LoginForm = Input<typeof LoginSchema>;
+import type { InitialValues, SubmitHandler} from '@modular-forms/qwik';
+import { reset, useForm, valiForm$ } from '@modular-forms/qwik';
+import type { LoginForm} from '../utils/modular-forms/index';
+import { LoginSchema, useFormAction } from '../utils/modular-forms/index';
 
 export const useFormLoader = routeLoader$<InitialValues<LoginForm>>(() => ({
   email: '',
   password: '',
 }));
 
-export const useFormAction = formAction$<LoginForm>(() => {}, valiForm$(LoginSchema));
-
 export default component$(() => {
-  const [loginForm, { Form, Field, FieldArray }] = useForm<LoginForm>({
+  const [ loginForm, { Form, Field } ] = useForm<LoginForm>({
     loader: useFormLoader(),
     action: useFormAction(),
-    validate: valiForm$(LoginSchema),
+    validate: valiForm$(LoginSchema)
   });
 
-  const handleSubmit = $<SubmitHandler<LoginForm>>((values, event) => {
-    loginForm.element?.reset();
-    alert('Login success');
+  const handleSubmit = $<SubmitHandler<LoginForm>>(async (values, event) => {
+    console.log(values);
+    console.log(event.target);
+    alert('Registro completado');
+    reset(loginForm);
   });
 
   return (
-    <Form onSubmit$={handleSubmit} class="flex flex-col items-center justify-center gap-4">
+    <Form
+      onSubmit$={handleSubmit}
+      class="flex flex-col gap-2 items-center justify-center"
+      >
       <Field name="email">
         {(field, props) => (
-          <div class="w-80 grid grid-cols-1 gap-1">
-            <label class="text-sm" for="email">
-              {
-                field.error &&
-                <span class="text-red-500">* </span>
-              }
-              Email
+          <div class="grid grid-cols-1 gap-1">
+            <label
+              for="email"
+              class="text-sm text-medium uppercase"
+              >
+              email
             </label>
-            <input class="w-full border rounded-md py-1 px-3" {...props} type="email" value={field.value} />
-            { field.error &&
-              <div class="text-red-500 text-sm">{field.error}</div>
+            <input
+              {...props}
+              type="email"
+              value={field.value}
+              class="w-80 px-2 py-1 rounded-md border"
+              />
+            {
+              field.error &&
+                <div class="text-red-500 text-sm">
+                  * {field.error}
+                </div>
             }
           </div>
         )}
       </Field>
       <Field name="password">
         {(field, props) => (
-          <div class="w-80 grid grid-cols-1 gap-1">
-            <label class="text-sm" for="password">
-              {
-                field.error &&
-                <span class="text-red-500">* </span>
-              }
-              Password
+          <div class="grid grid-cols-1 gap-1">
+            <label
+              for="password"
+              class="text-sm text-medium uppercase"
+              >
+              password
             </label>
-            <input class="w-full border rounded-md py-1 px-3" {...props} type="password" value={field.value} />
-            { field.error &&
-              <div class="text-red-500 text-sm">{field.error}</div>
+            <input
+              {...props}
+              type="password"
+              value={field.value}
+              class="w-80 px-2 py-1 rounded-md border"
+              />
+            {
+              field.error &&
+                <div class="text-red-500 text-sm">
+                  * {field.error}
+                </div>
             }
           </div>
         )}
       </Field>
-      <button class="bg-sky-500 text-white rounded-md py-2 px-4 w-full uppercase font-medium text-sm transition-transform ease-linear duration-100 active:scale-95" type="submit">iniciar sesión</button>
+      <button
+        type="submit"
+        class="bg-sky-500 text-white rounded-md w-full px-4 py-2 text-center text-sm font-medium uppercase"
+        >
+        Login
+      </button>
     </Form>
   );
 });
@@ -83,7 +92,7 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'Implementando la librería modular-forms a una app Qwik',
+      content: 'Aplicando modular-forms en una app de qwik.',
     },
   ],
 };

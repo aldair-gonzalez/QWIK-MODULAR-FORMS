@@ -37,7 +37,7 @@ module.exports = {
     '@typescript-eslint/no-unnecessary-condition': 'warn',
     'prefer-spread': 'off',
     'no-case-declarations': 'off',
-    'no-console': 'error',
+    'no-console': 'off',
     'quotes': ['error', 'single'],
     'jsx-quotes': ['error', 'prefer-double'],
     'eol-last': ['error', 'always'],
