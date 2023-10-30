@@ -2,7 +2,7 @@
   "name": "qwik-modular-forms",
   "description": "Implementando Modular Forms en qwik",
   "engines": {
-    "node": ">=15.0.0"
+    "node": "latest"
   },
   "private": false,
   "trustedDependencies": [
